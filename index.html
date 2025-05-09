@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journey</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-image: url('1.png'); /* Замініть на шлях до вашого зображення */
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            font-family: sans-serif;
+            color: #333;
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.5); /* Прозорий темний фон */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%; /* Забезпечує розтягування контенту на всю ширину хедера */
+            max-width: 1200px; /* Опціонально: обмежує ширину на дуже великих екранах */
+            margin: 0 auto; /* Центрує контент хедера */
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .icon-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-list img {
+            width: 30px; /* Однаковий розмір для всіх */
+            height: 30px;
+            filter: invert(1); /* Білий колір за замовчуванням */
+            transition: filter 0.2s ease-in-out;
+        }
+
+        .icon-list li:nth-child(3) img {
+            border-radius: 50%; /* Круглий компас */
+            object-fit: cover;
+        }
+
+        .icon-list img:hover {
+            filter: invert(60%) sepia(98%) saturate(318%) hue-rotate(76deg) brightness(98%) contrast(97%); /* Зелений при наведенні */
+        }
+
+        .auth-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s ease; /* Added transition */
+        }
+
+        .auth-links a:hover {
+            background: #1a2a3a;
+            text-decoration: none;
+        }
+
+        .auth-links a:first-child { /* Style "Welcome," */
+            color: #a7d9ed;
+            margin-left: 0;
+            transition: none; /* Removed transition for hover effect */
+        }
+
+        .auth-links a:first-child:hover {
+            background: none; /* Prevent background change on hover */
+        }
+
+        .auth-links a:nth-child(2), /* Style "Log In" */
+        .auth-links a:nth-child(3)    /* Style "Sign Up" */
+        {
+            color: #73EC8B; /* Green color */
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 65px); /* Adjust based on header height */
+        }
+
+        .modal {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: space-between; /* Розміщує вкладки по краях */
+        }
+
+        .signup-tab-container {
+            display: flex;
+            align-items: center;
+            /* Не задаємо justify-content, щоб елементи були зліва */
+        }
+
+        .signup-tab {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .signup-tab.active {
+            color: #333;
+        }
+
+        .green-dot {
+            background-color: #67C15E;
+            width: 30px;
+            height: 16px;
+            border-radius: 0;
+            margin-right: 50px;
+            margin-left: -30px;
+        }
+
+        .login-tab {
+            font-weight: bold;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s ease; /* Додано перехід */
+        }
+
+        .login-tab:hover {
+            color: #67C15E; /* Зелений колір при наведенні */
+        }
+
+        .social-login {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center; /* Центруємо кнопки */
+        }
+
+        .social-login button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Центруємо іконку та текст всередині кнопки */
+            transition: transform 0.2s ease-in-out; /* Added transition for scale */
+            font-size: 1em; /* Базовий розмір шрифту */
+        }
+
+        .social-login button:hover {
+            transform: scale(1.05); /* Slightly scale up on hover */
+        }
+
+        .facebook-login {
+            background-color: #4267B2; /* Facebook blue */
+            width: 120px; /* Задаємо ширину */
+        }
+
+        .google-login {
+            background-color: #DB4437; /* Google red */
+            width: 120px; /* Задаємо ширину */
+        }
+
+        .separator {
+            text-align: center;
+            margin: 15px 0;
+            color: #777;
+        }
+
+        .signup-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .signup-form input[type="text"],
+        .signup-form input[type="email"],
+        .signup-form input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% - 22px); /* Adjust for padding and border */
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition */
+        }
+
+        .signup-form input:focus {
+            outline: none;
+            border-color: #007bff; /* Example focus border color */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Example focus box shadow */
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+        }
+
+        .create-account-button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease; /* Added transition */
+        }
+
+        .create-account-button:hover {
+            background-color: #27ae60; /* Darker shade on hover */
+        }
+
+        .social-icon.facebook-img {
+            width: 18px; /* Задамо фіксовану ширину */
+            height: 18px; /* Задамо фіксовану висоту */
+            vertical-align: middle;
+            margin-right: 5px;
+            filter: invert(1) brightness(5);
+        }
+
+        .social-icon.google-img {
+            width: 40px; /* Задамо таку ж ширину */
+            height: 40px; /* Задамо таку ж висоту */
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<header class="main-header">
+    <div class="header-content">
+        <div class="logo">JOURNEY</div>
+        <nav class="header-nav">
+            <ul class="icon-list">
+                <li><img src="img.png" alt="Icon 1"></li>
+                <li><img src="img_1.png" alt="Icon 2"></li>
+                <li><img src="img_2.png" alt="Icon 3"></li>
+            </ul>
+            <div class="auth-links">
+                <a href="#">Welcome,</a>
+                <a href="#">Log In</a> or
+                <a href="#">Sign Up</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main class="main-content">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="signup-tab-container">
+                <div class="signup-tab active">
+                    <span class="green-dot"></span>Sign Up
+                </div>
+            </div>
+            <div class="login-tab">Log In</div>
+        </div>
+        <div class="modal-body signup-body">
+            <div class="social-login">
+                <button class="facebook-login">
+                    <img src="F.png" alt="Facebook" class="social-icon facebook-img"> Facebook
+                </button>
+                <button class="google-login">
+                    <img src="g.png" alt="Google" class="social-icon google-img"> Google
+                </button>
+            </div>
+            <div class="separator">or</div>
+            <form class="signup-form">
+                <div class="form-group">
+                    <input type="text" placeholder="First name">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Choose Password">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Confirm Password">
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" name="terms">
+                    <label for="terms">Agree our <a href="#">Terms & Conditions</a></label>
+                </div>
+                <button type="submit" class="create-account-button">Create Account</button>
+            </form>
+        </div>
+        <div class="modal-body login-body" style="display: none;">
+        </div>
+    </div>
+</main>
+
+<script>
+    // Basic tab switching
+    const signupTab = document.querySelector('.signup-tab');
+    const loginTab = document.querySelector('.login-tab');
+    const signupBody = document.querySelector('.modal-body.signup-body');
+    const loginBody = document.querySelector('.modal-body.login-body');
+
+    signupTab.addEventListener('click', () => {
+        signupTab.classList.add('active');
+        loginTab.classList.remove('active');
+        signupBody.style.display = 'block';
+        loginBody.style.display = 'none';
+    });
+
+    loginTab.addEventListener('click', () => {
+        loginTab.classList.add('active');
+        signupTab.classList.remove('active');
+        signupBody.style.display = 'none';
+        loginBody.style.display = 'block';
+    });
+
+    // Make checkbox label toggle the checkbox
+    const termsCheckbox = document.getElementById('terms');
+    const termsLabel = document.querySelector('label[for="terms"]');
+
+    termsLabel.addEventListener('click', () => {
+        termsCheckbox.checked = !termsCheckbox.checked;
+    });
+
+    // Highlight input on focus
+    const inputFields = document.querySelectorAll('.signup-form input[type="text"], .signup-form input[type="email"], .signup-form input[type="password"]');
+
+    inputFields.forEach(input => {
+        input.addEventListener('focus', () => {
+            input.classList.add('focused');
+        });
+        input.addEventListener('blur', () => {
+            input.classList.remove('focused');
+        });
+    });
+</script>
+</body>
+</html>
